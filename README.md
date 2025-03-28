@@ -33,9 +33,8 @@ Will be hosted soon....
 
 1. **Clone the repository**  
    ```sh
-git clone https://github.com/your-username/donezo-frontend.git
-
-cd donezo-frontend
+   git clone https://github.com/your-username/donezo-frontend.git
+   cd donezo-frontend
    ```
 
 2. **Install dependencies**
