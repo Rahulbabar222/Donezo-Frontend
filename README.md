@@ -32,10 +32,10 @@ Will be hosted soon....
 ## 🔧 Frontend Setup
 
 1. **Clone the repository**  
-   ```sh
-   git clone https://github.com/your-username/donezo-frontend.git
-   cd donezo-frontend
-   ```
+```sh
+git clone https://github.com/your-username/donezo-frontend.git
+cd donezo-frontend
+```
 
 2. **Install dependencies**
  ```sh
@@ -48,9 +48,9 @@ npm run dev
 ```
 
 4. **Build for production**
-    ```sh
-    npm run build
-    ```
+```sh
+npm run build
+```
 
 ## 🔧 Backend - [View Github Repo](https://github.com/Rahulbabar222/Donezo-Backend "Visit Repo")
 
