@@ -43,7 +43,7 @@ const TodoList = ({ }) => {
 
                     <div key={task._id} className='py-1 border-b-2 border-gray-300 w-full'>
                         <div className='flex justify-between'>
-                            <div className="flex items-center text-sm gap-2 w-9/10">
+                            <div className="flex items-center text-sm gap-2 w-8/10 sm:w-9/10">
                                 <input name={task._id} onChange={handleCheckbox} type="checkbox" checked={task.isCompleted} className="cursor-pointer" />
 
 
@@ -63,7 +63,7 @@ const TodoList = ({ }) => {
                                 )}
 
                             </div>
-                            <div className="flex justify-evenly min-w-1/10">
+                            <div className="flex justify-evenly min-w-2/10 sm:min-w-1/10">
                                 {/*Edit button// Save button appears when editing */}
                                 {editTodoId === task._id ? (
                                     // savebutton
@@ -119,8 +119,8 @@ const TodoList = ({ }) => {
                         ) : (
                             <div className=' text-zinc-600 text-xs flex items-center'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" className={` text-gray-600}`} fill="none">
-                                    <path d="M21 17.5H3C4.50991 16.896 5.5 15.4336 5.5 13.8074V9C5.5 5.41015 8.41015 2.5 12 2.5C15.5899 2.5 18.5 5.41015 18.5 9V13.8074C18.5 15.4336 19.4901 16.896 21 17.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M14.5 20.5C13.8557 21.1186 12.9733 21.5 12 21.5C11.0267 21.5 10.1443 21.1186 9.5 20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M21 17.5H3C4.50991 16.896 5.5 15.4336 5.5 13.8074V9C5.5 5.41015 8.41015 2.5 12 2.5C15.5899 2.5 18.5 5.41015 18.5 9V13.8074C18.5 15.4336 19.4901 16.896 21 17.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M14.5 20.5C13.8557 21.1186 12.9733 21.5 12 21.5C11.0267 21.5 10.1443 21.1186 9.5 20.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                                 <p> - {task.reminder ? `${formatLocalDate(task.reminder).split(" 2025, ")[0]}, ${formatLocalDate(task.reminder).split(",")[1]}` : "No alert set"}</p>
                             </div>
