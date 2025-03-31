@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+.react-datetime-picker {
+  width: 100%; /* Adjust width as needed */
+  max-width: 250px; /* Prevents excessive stretching */
+}
+
+.react-datetime-picker__wrapper {
+  min-width: 200px;
+  background-color: white;
+  border: thin solid gray;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.react-datetime-picker__inputGroup {
+  display: flex;
+  justify-content: space-between;
+}

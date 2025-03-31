@@ -119,6 +119,17 @@ export const TodoProvider = ({ children }) => {
         setEditText(task.todo)
     }
 
+    //Cancel button
+    const handleCancelClick = () => {
+        setEditTodoId("")
+        setEditText("")
+        setReminder(null)
+        setSelectedLabel("");
+        setisreminderopen(false)
+    }
+
+    
+
     //Save Buttton
     const handleSave = async (uid) => {
         const confirmSave = window.confirm("Do you want to save new changes?");
@@ -131,18 +142,21 @@ export const TodoProvider = ({ children }) => {
             saveAudio.play()
             setTodos(prevTodos =>
                 prevTodos.map(todo =>
-                    todo._id === uid ? { ...todo, todo: editText,label:selectedLabel } : todo
+                    todo._id === uid ? { ...todo, todo: editText,label:selectedLabel, reminder:reminder } : todo
                 )
             );
             setEditTodoId("");
             setSelectedLabel("");
+            setReminder(null);
+            setisreminderopen(false);
+
 
             try {
                 // Send update to backend
                 await fetch(`http://localhost:3001/todos/${uid}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ todo: editText, label:selectedLabel }),
+                    body: JSON.stringify({ todo: editText, label:selectedLabel, reminder:reminder }),
                 });
             } catch (error) {
                 console.error("Error updating todo:", error);
@@ -256,7 +270,7 @@ export const TodoProvider = ({ children }) => {
     return (
         <TodoContext.Provider value={{
         setFilter,filteredTodos,handleCheckbox, editTodoId, editText, 
-        handleEditClick, setEditText, handleDelete, handleSave, filter,
+        handleEditClick,handleCancelClick, setEditText, handleDelete, handleSave, filter,
         handleLabelChange,label,handleLabelAdd,labels,settempLabel,handleLabelDelete,
         selectedLabel,setSelectedLabel,handleTodoChange,todo,handleAdd,tempLabel,reminder, setReminder,
         isreminderopen, setisreminderopen}}>
