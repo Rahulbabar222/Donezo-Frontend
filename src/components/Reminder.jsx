@@ -39,7 +39,7 @@ const Reminder = ({text,color,size}) => {
                     </svg>
                 </button>
 
-                {isreminderopen && <div className="calendar-container absolute top-10"
+                {isreminderopen && <div className="calendar-container absolute top-11"
                 ref={dateTimePickerRef}
                 onClick={(e) => e.stopPropagation()} //Prevents closing when clicking inside 
                 >

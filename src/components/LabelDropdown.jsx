@@ -36,7 +36,7 @@ const LabelDropdown = ({text, color,size }) => {
 
             {/* Dropdown options */}
             {isOpen && (
-                <ul className="absolute left-0 mt-2 w-40 bg-white border-none rounded-lg shadow-md">
+                <ul className="absolute left-0 w-40 bg-white border-none rounded-lg shadow-md">
                     <li className="p-2 text-sm hover:bg-gray-100 cursor-pointer" onClick={() => { setSelectedLabel(""); setIsOpen(false); }}>• None (default)</li>
                     {labels.map((label) => (
                         <li
