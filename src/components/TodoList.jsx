@@ -9,7 +9,10 @@ import Reminder from './Reminder';
 
 
 const TodoList = ({ }) => {
-    const { setFilter, filteredTodos, handleCheckbox, editTodoId, editText, handleEditClick, handleCancelClick, setEditText, handleDelete, handleSave, filter, tempLabel } = useContext(TodoContext)
+    const { setFilter, filteredTodos, handleCheckbox,
+         editTodoId, editText, handleEditClick,
+          handleCancelClick, setEditText, handleDelete,
+           handleSave, filter, tempLabel } = useContext(TodoContext)
 
     return (
         <>
@@ -21,7 +24,7 @@ const TodoList = ({ }) => {
                 <button onClick={() => setFilter("completed")} className={` px-4 hover:bg-gray-100 rounded-full ${filter === "completed" ? "text-zinc-700 font-bold" : "text-zinc-400"}`}>Completed</button>
             </div>
 
-            <div className="tasks bg-[#f1ece6] rounded-3xl sm:w-full h-[55vh] px-5 py-3 overflow-y-auto">
+            <div className="tasks bg-[#f1ece6] rounded-3xl sm:w-full h-fit sm:h-[53vh] px-5 py-3 overflow-y-auto">
 
                 {/* empty message */}
                 {filteredTodos.length === 0 && (
@@ -57,7 +60,7 @@ const TodoList = ({ }) => {
                                     />
                                 ) : (
 
-                                    <p className={`text-zinc-600 ${task.isCompleted ? "line-through" : ""}`}>
+                                    <p className={`text-zinc-700 font-bold ${task.isCompleted ? "line-through" : ""}`}>
                                         {task.todo}
                                     </p>
                                 )}

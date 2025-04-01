@@ -2,16 +2,30 @@ import React, { useContext, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { TodoContext } from "../context/TodoContext";
+import { data } from "react-router-dom";
 
-const ToDoCalendar = ({ onSelectDate }) => {
+const ToDoCalendar = () => {
+    const {selectedDate, setSelectedDate,setFilter}= useContext(TodoContext)
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleDateChange = (date) => {
-        setSelectedDate(date);
-        onSelectDate(date);
-        setIsOpen(false);
+        // const isoString = date.toISOString().split("T")[0];
+        const newDate=date.getFullYear() + "-" + 
+        String(date.getMonth() + 1).padStart(2, '0') + "-" + 
+        String(date.getDate()).padStart(2, '0'); 
+
+        setSelectedDate(newDate);
+        setFilter(newDate)
+        // console.log(isoString)
+        console.log(newDate)
     };
+
+    useEffect(() => {
+      if (selectedDate){
+        setIsOpen(false)
+      }
+    }, [selectedDate])
+    
 
     return (
         <>

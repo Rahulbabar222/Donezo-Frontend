@@ -16,6 +16,7 @@ export const TodoProvider = ({ children }) => {
     const [filteredTodos, setFilteredTodos] = useState([]);
     const [reminder, setReminder] = useState(null);
     const [isreminderopen, setisreminderopen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
 
 
     // Fetch Todos on Mount
@@ -36,15 +37,27 @@ export const TodoProvider = ({ children }) => {
     useEffect(() => {
         let tempTodos = [...todos];
         if (filter === "active") {
-            tempTodos = tempTodos.filter(todo => !todo.isCompleted);
+            tempTodos = tempTodos.filter(todo => !todo.isCompleted );
         } else if (filter === "completed") {
-            tempTodos = tempTodos.filter(todo => todo.isCompleted);
+            tempTodos = tempTodos.filter(todo => todo.isCompleted );
         } else if (filter === tempLabel) {
-            tempTodos = tempTodos.filter(todo => todo.label === tempLabel);
+            tempTodos = tempTodos.filter(todo => todo.label === tempLabel );
+        } else if (filter === selectedDate){
+            tempTodos = tempTodos.filter(todo => {
+                const todoDate = new Date(todo.createdAt); // Convert string to Date object
+                const formattedTodoDate = todoDate.getFullYear() + "-" + 
+                                          String(todoDate.getMonth() + 1).padStart(2, '0') + "-" + 
+                                          String(todoDate.getDate()).padStart(2, '0');
+                                          return formattedTodoDate === selectedDate;
+                                        });
+
         } 
-        tempTodos = tempTodos.sort((a, b) => a.isCompleted - b.isCompleted);
+        tempTodos = tempTodos.sort((a, b) => a.isCompleted - b.isCompleted );
             
         setFilteredTodos(tempTodos);
+        if (["all", tempLabel, "active", "completed"].includes(filter)) {
+            setSelectedDate(null);
+        }
     }, [todos, filter, tempLabel]);
 
 
@@ -273,7 +286,7 @@ export const TodoProvider = ({ children }) => {
         handleEditClick,handleCancelClick, setEditText, handleDelete, handleSave, filter,
         handleLabelChange,label,handleLabelAdd,labels,settempLabel,handleLabelDelete,
         selectedLabel,setSelectedLabel,handleTodoChange,todo,handleAdd,tempLabel,reminder, setReminder,
-        isreminderopen, setisreminderopen}}>
+        isreminderopen, setisreminderopen,selectedDate, setSelectedDate}}>
             {children}
         </TodoContext.Provider>
     );
