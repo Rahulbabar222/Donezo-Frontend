@@ -1,40 +1,46 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState,useRef } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { TodoContext } from "../context/TodoContext";
-import { data } from "react-router-dom";
+// import { data } from "react-router-dom";
 
 const ToDoCalendar = () => {
-    const {selectedDate, setSelectedDate,setFilter}= useContext(TodoContext)
+    const {selectedDate, setSelectedDate,setFilter,filter}= useContext(TodoContext)
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
 
     const handleDateChange = (date) => {
-        // const isoString = date.toISOString().split("T")[0];
         const newDate=date.getFullYear() + "-" + 
         String(date.getMonth() + 1).padStart(2, '0') + "-" + 
         String(date.getDate()).padStart(2, '0'); 
-
         setSelectedDate(newDate);
         setFilter(newDate)
-        // console.log(isoString)
-        console.log(newDate)
     };
 
     useEffect(() => {
       if (selectedDate){
         setIsOpen(false)
       }
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [selectedDate])
     
 
     return (
         <>
-            <div className="relative inline-block text-left">
+            <div className="relative inline-block text-left" ref={dropdownRef}>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className={`flex items-center px-2 py-1 m-2 gap-2 rounded-full ${isOpen ? "bg-gray-600" : ""}`}>
+                    className={`flex items-center px-2 py-1 m-2 gap-2 rounded-full ${isOpen || filter===selectedDate ? "bg-gray-600" : ""}`}>
                         
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" className={`${isOpen ? "text-white" : "text-gray-600"}`} fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" className={`${isOpen || filter===selectedDate ? "text-white" : "text-gray-600"}`} fill="none">
                         <path d="M18 2V4M6 2V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M11.9955 13H12.0045M11.9955 17H12.0045M15.991 13H16M8 13H8.00897M8 17H8.00897" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M3.5 8H20.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -43,7 +49,7 @@ const ToDoCalendar = () => {
                     </svg>
                 </button>
 
-                {isOpen && <div className="calendar-container absolute top-10">
+                {isOpen && <div className="calendar-container absolute top-10 z-100">
                     <Calendar onChange={handleDateChange} value={selectedDate} />
                 </div>}
             </div>

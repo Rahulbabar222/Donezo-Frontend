@@ -5,6 +5,7 @@ import LeftNav from './leftNav';
 import { TodoContext } from "../context/TodoContext";
 import { UiContext } from '../context/UiContext';
 import Reminder from './Reminder';
+import Priority from './Priority';
 
 
 function Home() {
@@ -34,6 +35,7 @@ function Home() {
                             <div className='flex'>
                                 <Reminder text={"text-sm"} color={"text-zinc-700"} size={"20"} />
                                 <LabelDropdown text={"text-sm"} color={"text-zinc-700"} size={"20"} />
+                                <Priority text={"text-sm"} color={"text-zinc-700"} size={"20"}/>
                             </div>
                         </div>
 

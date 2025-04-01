@@ -17,6 +17,8 @@ export const TodoProvider = ({ children }) => {
     const [reminder, setReminder] = useState(null);
     const [isreminderopen, setisreminderopen] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [priority, setPriority] = useState("");
+    const [ispriorityOpen, setIspriorityOpen] = useState(false);
 
 
     // Fetch Todos on Mount
@@ -74,7 +76,7 @@ export const TodoProvider = ({ children }) => {
         const response = await fetch("http://localhost:3001/todos", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ todo: todo, label: selectedLabel, reminder:reminder }),
+            body: JSON.stringify({ todo: todo, label: selectedLabel, reminder:reminder ,priority:priority}),
         });
 
         const newTodo = await response.json();
@@ -84,6 +86,7 @@ export const TodoProvider = ({ children }) => {
         setSelectedLabel("")
         setisreminderopen(false)
         setReminder(null)
+        setPriority("")
     };
 
     //Delete Button
@@ -128,8 +131,11 @@ export const TodoProvider = ({ children }) => {
 
     //Edit button
     const handleEditClick = (task) => {
-        setEditTodoId(task._id)
-        setEditText(task.todo)
+        setEditTodoId(task._id);
+        setEditText(task.todo);
+        // setReminder(task.reminder);
+        setPriority(task.priority);
+        setSelectedLabel(task.label);
     }
 
     //Cancel button
@@ -138,7 +144,9 @@ export const TodoProvider = ({ children }) => {
         setEditText("")
         setReminder(null)
         setSelectedLabel("");
-        setisreminderopen(false)
+        setisreminderopen(false);
+        setIspriorityOpen(false);
+        setPriority("")
     }
 
     
@@ -155,13 +163,15 @@ export const TodoProvider = ({ children }) => {
             saveAudio.play()
             setTodos(prevTodos =>
                 prevTodos.map(todo =>
-                    todo._id === uid ? { ...todo, todo: editText,label:selectedLabel, reminder:reminder } : todo
+                    todo._id === uid ? { ...todo, todo: editText,label:selectedLabel, reminder:reminder, priority:priority} : todo
                 )
             );
             setEditTodoId("");
             setSelectedLabel("");
             setReminder(null);
             setisreminderopen(false);
+            setIspriorityOpen(false);
+            setPriority("")
 
 
             try {
@@ -169,7 +179,7 @@ export const TodoProvider = ({ children }) => {
                 await fetch(`http://localhost:3001/todos/${uid}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ todo: editText, label:selectedLabel, reminder:reminder }),
+                    body: JSON.stringify({ todo: editText, label:selectedLabel, reminder:reminder ,priority:priority}),
                 });
             } catch (error) {
                 console.error("Error updating todo:", error);
@@ -286,7 +296,8 @@ export const TodoProvider = ({ children }) => {
         handleEditClick,handleCancelClick, setEditText, handleDelete, handleSave, filter,
         handleLabelChange,label,handleLabelAdd,labels,settempLabel,handleLabelDelete,
         selectedLabel,setSelectedLabel,handleTodoChange,todo,handleAdd,tempLabel,reminder, setReminder,
-        isreminderopen, setisreminderopen,selectedDate, setSelectedDate}}>
+        isreminderopen, setisreminderopen,selectedDate, setSelectedDate,priority, setPriority,
+        ispriorityOpen, setIspriorityOpen}}>
             {children}
         </TodoContext.Provider>
     );
