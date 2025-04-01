@@ -1,9 +1,10 @@
-import React, { useContext,useRef, useEffect } from 'react'
+import React, { useContext,useRef, useEffect,useState } from 'react'
 import { TodoContext } from '../context/TodoContext'
 
 const Priority = ({text,color,size }) => {
-    const { priority, setPriority,ispriorityOpen, setIspriorityOpen,setisreminderopen } = useContext(TodoContext)
+    const { priority, setPriority,setisreminderopen } = useContext(TodoContext)
     const dropdownRef = useRef(null);
+    const [ispriorityOpen, setIspriorityOpen] = useState(false);
     // Close dropdown if clicked outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -11,9 +12,8 @@ const Priority = ({text,color,size }) => {
                 setIspriorityOpen(false);
             }
         };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => document.removeEventListener("pointerdown", handleClickOutside);
     }, []);
     return (
         <>

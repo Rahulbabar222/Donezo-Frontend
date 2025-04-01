@@ -13,7 +13,9 @@ const TodoList = ({ }) => {
     const { setFilter, filteredTodos, handleCheckbox,
         editTodoId, editText, handleEditClick,
         handleCancelClick, setEditText, handleDelete,
-        handleSave, filter, tempLabel, priority, setPriority } = useContext(TodoContext)
+        handleSave, filter, tempLabel,todos } = useContext(TodoContext)
+
+    const completedTasksCount = todos.filter(todo => todo.isCompleted);
 
     return (
         <>
@@ -24,6 +26,10 @@ const TodoList = ({ }) => {
                 <button onClick={() => setFilter("active")} className={` px-4 hover:bg-gray-100 rounded-full ${filter === "active" ? "text-zinc-700 font-bold" : "text-zinc-400"}`}>Active</button>
                 <button onClick={() => setFilter("completed")} className={` px-4 hover:bg-gray-100 rounded-full ${filter === "completed" ? "text-zinc-700 font-bold" : "text-zinc-400"}`}>Completed</button>
             </div>
+
+            {filter==="all" && (
+                <div className='px-2 text-sm text-zinc-600'>{`${completedTasksCount.length} of ${todos.length} task completed`}</div>
+            )}
 
             <div className="tasks bg-[#f1ece6] rounded-3xl sm:w-full h-fit sm:h-[53vh] px-5 py-3 overflow-y-auto">
 
@@ -62,7 +68,7 @@ const TodoList = ({ }) => {
                                 ) : (
 
                                     <p className={`text-zinc-700 flex  font-bold ${task.isCompleted ? "line-through" : "white"}`}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" className={task.priority==="High"?"text-red-600":task.priority==="Medium"?"text-orange-400":task.priority==="Low"?"text-blue-600":""} fill={task.priority==="Low"?"blue":task.priority==="Medium"?"orange":task.priority==="High"?"red":"white"}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" className={task.priority === "High" ? "text-red-600" : task.priority === "Medium" ? "text-orange-400" : task.priority === "Low" ? "text-blue-600" : ""} fill={task.priority === "Low" ? "blue" : task.priority === "Medium" ? "orange" : task.priority === "High" ? "red" : "white"}>
                                             <path d="M4 7L4 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                             <path d="M11.7576 3.90865C8.45236 2.22497 5.85125 3.21144 4.55426 4.2192C4.32048 4.40085 4.20358 4.49167 4.10179 4.69967C4 4.90767 4 5.10138 4 5.4888V14.7319C4.9697 13.6342 7.87879 11.9328 11.7576 13.9086C15.224 15.6744 18.1741 14.9424 19.5697 14.1795C19.7633 14.0737 19.8601 14.0207 19.9301 13.9028C20 13.7849 20 13.6569 20 13.4009V5.87389C20 5.04538 20 4.63113 19.8027 4.48106C19.6053 4.33099 19.1436 4.459 18.2202 4.71504C16.64 5.15319 14.3423 5.22532 11.7576 3.90865Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
@@ -127,11 +133,27 @@ const TodoList = ({ }) => {
                             </div>
                         ) : (
                             <div className=' text-zinc-600 text-xs flex items-center'>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" className={` text-gray-600}`} fill="none">
-                                    <path d="M21 17.5H3C4.50991 16.896 5.5 15.4336 5.5 13.8074V9C5.5 5.41015 8.41015 2.5 12 2.5C15.5899 2.5 18.5 5.41015 18.5 9V13.8074C18.5 15.4336 19.4901 16.896 21 17.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M14.5 20.5C13.8557 21.1186 12.9733 21.5 12 21.5C11.0267 21.5 10.1443 21.1186 9.5 20.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                                <p> - {task.reminder ? `${formatLocalDate(task.reminder).split(" 2025, ")[0]}, ${formatLocalDate(task.reminder).split(",")[1]}` : "No alert set"}</p>
+                                <div className='flex items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" className={` text-gray-600}`} fill="none">
+                                        <path d="M21 17.5H3C4.50991 16.896 5.5 15.4336 5.5 13.8074V9C5.5 5.41015 8.41015 2.5 12 2.5C15.5899 2.5 18.5 5.41015 18.5 9V13.8074C18.5 15.4336 19.4901 16.896 21 17.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M14.5 20.5C13.8557 21.1186 12.9733 21.5 12 21.5C11.0267 21.5 10.1443 21.1186 9.5 20.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                    <p> - {task.reminder ? `${formatLocalDate(task.reminder).split(" 2025, ")[0]}, ${formatLocalDate(task.reminder).split(",")[1]}` : "No alert set"}</p>
+                                </div>
+
+                                <div className='flex items-center mx-3'>
+                                    {task.label && (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" className="text-gray-600">
+                                                <circle cx="1.5" cy="1.5" r="1.5" transform="matrix(1 0 0 -1 16 8.00024)" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                <path d="M2.77423 11.1439C1.77108 12.2643 1.7495 13.9546 2.67016 15.1437C4.49711 17.5033 6.49674 19.5029 8.85633 21.3298C10.0454 22.2505 11.7357 22.2289 12.8561 21.2258C15.8979 18.5022 18.6835 15.6559 21.3719 12.5279C21.6377 12.2187 21.8039 11.8397 21.8412 11.4336C22.0062 9.63798 22.3452 4.46467 20.9403 3.05974C19.5353 1.65481 14.362 1.99377 12.5664 2.15876C12.1603 2.19608 11.7813 2.36233 11.472 2.62811C8.34412 5.31646 5.49781 8.10211 2.77423 11.1439Z" stroke="currentColor" strokeWidth="1.5" />
+                                                <path d="M7.00002 14.0002L10 17.0002" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+
+                                            <p className="ml-1">- {task.label}</p>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         )}
 

@@ -18,7 +18,7 @@ export const TodoProvider = ({ children }) => {
     const [isreminderopen, setisreminderopen] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [priority, setPriority] = useState("");
-    const [ispriorityOpen, setIspriorityOpen] = useState(false);
+    
 
 
     // Fetch Todos on Mount
@@ -54,13 +54,22 @@ export const TodoProvider = ({ children }) => {
             });
 
         }
-        tempTodos = tempTodos.sort((a, b) => a.isCompleted - b.isCompleted);
+        
+        // for "all" filter todo by completed first and list by priority of task
+        tempTodos = tempTodos.sort((a, b) => {
+            const priorityOrder = { "High": 1, "Medium": 2, "Low": 3, "": 4 };
+
+            if (a.isCompleted !== b.isCompleted) {
+                return a.isCompleted - b.isCompleted;
+            }
+            return (priorityOrder[a.priority] || 4) - (priorityOrder[b.priority] || 4);
+        });
 
         setFilteredTodos(tempTodos);
         if (["all", tempLabel, "active", "completed"].includes(filter)) {
             setSelectedDate(null);
         }
-    }, [todos, filter, tempLabel]);
+    }, [todos, filter, tempLabel,selectedDate]);
 
 
     //Handling chnage in text Box
@@ -289,12 +298,11 @@ export const TodoProvider = ({ children }) => {
 
     return (
         <TodoContext.Provider value={{
-            setFilter, filteredTodos, handleCheckbox, editTodoId, editText,
+            todos,setFilter, filteredTodos, handleCheckbox, editTodoId, editText,
             handleEditClick, handleCancelClick, setEditText, handleDelete, handleSave, filter,
             handleLabelChange, label, handleLabelAdd, labels, settempLabel, handleLabelDelete,
             selectedLabel, setSelectedLabel, handleTodoChange, todo, handleAdd, tempLabel, reminder, setReminder,
-            isreminderopen, setisreminderopen, selectedDate, setSelectedDate, priority, setPriority,
-            ispriorityOpen, setIspriorityOpen
+            isreminderopen, setisreminderopen, selectedDate, setSelectedDate, priority, setPriority
         }}>
             {children}
         </TodoContext.Provider>
