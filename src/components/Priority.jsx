@@ -1,14 +1,25 @@
-import React, { useContext, useState,useRef } from 'react'
+import React, { useContext,useRef, useEffect } from 'react'
 import { TodoContext } from '../context/TodoContext'
 
 const Priority = ({text,color,size }) => {
-    const { priority, setPriority,ispriorityOpen, setIspriorityOpen } = useContext(TodoContext)
-    
+    const { priority, setPriority,ispriorityOpen, setIspriorityOpen,setisreminderopen } = useContext(TodoContext)
+    const dropdownRef = useRef(null);
+    // Close dropdown if clicked outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIspriorityOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
     return (
         <>
-            <div className={`relative inline-block text-left`}>
+            <div className={`relative inline-block text-left`} ref={dropdownRef}>
                 <button
-                    onClick={() => setIspriorityOpen(!ispriorityOpen)}
+                    onClick={() => {setIspriorityOpen(!ispriorityOpen); setisreminderopen(false)}}
                     className={`flex items-center px-2 py-1 m-2  gap-2 rounded-full border-1 border-gray-600 ${ispriorityOpen ? "bg-gray-600" : ""}`}>
                     <p className={`${text} ${ispriorityOpen ? "text-white" : color}`} >{priority} Priority</p>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={size} height={size} className={`${ispriorityOpen ? "text-white" : "text-gray-600"}`} fill="none">

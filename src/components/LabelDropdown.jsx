@@ -4,7 +4,7 @@ import { TodoContext } from "../context/TodoContext.jsx";
 const LabelDropdown = ({text, color,size }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null); // Reference to the dropdown container
-    const {labels,selectedLabel,setSelectedLabel}= useContext(TodoContext);
+    const {labels,selectedLabel,setSelectedLabel,setisreminderopen}= useContext(TodoContext);
 
     // Close dropdown if clicked outside
     useEffect(() => {
@@ -22,7 +22,7 @@ const LabelDropdown = ({text, color,size }) => {
         <div className="relative inline-block text-left" ref={dropdownRef}>
             {/* Button with SVG as dropdown trigger */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {setIsOpen(!isOpen); setisreminderopen(false)}}
                 className={`flex items-center px-2 py-1 m-2 gap-2 rounded-full border-1 border-gray-600 ${isOpen ? "bg-gray-600" : ""}`}
             >
                 <p className={`${text} ${isOpen ? "text-white" : color}`} >{selectedLabel}</p>

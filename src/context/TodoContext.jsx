@@ -39,23 +39,23 @@ export const TodoProvider = ({ children }) => {
     useEffect(() => {
         let tempTodos = [...todos];
         if (filter === "active") {
-            tempTodos = tempTodos.filter(todo => !todo.isCompleted );
+            tempTodos = tempTodos.filter(todo => !todo.isCompleted);
         } else if (filter === "completed") {
-            tempTodos = tempTodos.filter(todo => todo.isCompleted );
+            tempTodos = tempTodos.filter(todo => todo.isCompleted);
         } else if (filter === tempLabel) {
-            tempTodos = tempTodos.filter(todo => todo.label === tempLabel );
-        } else if (filter === selectedDate){
+            tempTodos = tempTodos.filter(todo => todo.label === tempLabel);
+        } else if (filter === selectedDate) {
             tempTodos = tempTodos.filter(todo => {
                 const todoDate = new Date(todo.createdAt); // Convert string to Date object
-                const formattedTodoDate = todoDate.getFullYear() + "-" + 
-                                          String(todoDate.getMonth() + 1).padStart(2, '0') + "-" + 
-                                          String(todoDate.getDate()).padStart(2, '0');
-                                          return formattedTodoDate === selectedDate;
-                                        });
+                const formattedTodoDate = todoDate.getFullYear() + "-" +
+                    String(todoDate.getMonth() + 1).padStart(2, '0') + "-" +
+                    String(todoDate.getDate()).padStart(2, '0');
+                return formattedTodoDate === selectedDate;
+            });
 
-        } 
-        tempTodos = tempTodos.sort((a, b) => a.isCompleted - b.isCompleted );
-            
+        }
+        tempTodos = tempTodos.sort((a, b) => a.isCompleted - b.isCompleted);
+
         setFilteredTodos(tempTodos);
         if (["all", tempLabel, "active", "completed"].includes(filter)) {
             setSelectedDate(null);
@@ -70,13 +70,13 @@ export const TodoProvider = ({ children }) => {
 
     //Add button
     const handleAdd = async () => {
-        const addSound= new Audio("/Todoadded.mp3")
+        const addSound = new Audio("/Todoadded.mp3")
         addSound.play();
 
         const response = await fetch("http://localhost:3001/todos", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ todo: todo, label: selectedLabel, reminder:reminder ,priority:priority}),
+            body: JSON.stringify({ todo: todo, label: selectedLabel, reminder: reminder, priority: priority }),
         });
 
         const newTodo = await response.json();
@@ -91,11 +91,11 @@ export const TodoProvider = ({ children }) => {
 
     //Delete Button
     const handleDelete = async (id) => {
-        
+
         const confirmDelete = window.confirm("Are you sure you want to delete this todo?");
         if (!confirmDelete) return;
 
-        const deleteSound= new Audio("/Delete.mp3")
+        const deleteSound = new Audio("/Delete.mp3")
         deleteSound.play();
 
         await fetch(`http://localhost:3001/todos/${id}`, { method: "DELETE" });
@@ -104,7 +104,7 @@ export const TodoProvider = ({ children }) => {
 
     //Checkbox Handling
     const handleCheckbox = async (e) => {
-        const checkSound= new Audio("/Check.mp3");
+        const checkSound = new Audio("/Check.mp3");
         checkSound.play();
 
         const uid = e.target.name;
@@ -133,9 +133,9 @@ export const TodoProvider = ({ children }) => {
     const handleEditClick = (task) => {
         setEditTodoId(task._id);
         setEditText(task.todo);
-        // setReminder(task.reminder);
         setPriority(task.priority);
         setSelectedLabel(task.label);
+        setReminder(task.reminder);
     }
 
     //Cancel button
@@ -149,8 +149,6 @@ export const TodoProvider = ({ children }) => {
         setPriority("")
     }
 
-    
-
     //Save Buttton
     const handleSave = async (uid) => {
         const confirmSave = window.confirm("Do you want to save new changes?");
@@ -159,28 +157,27 @@ export const TodoProvider = ({ children }) => {
             return;
 
         } else {
-            let saveAudio= new Audio("/Save.mp3")
+            let saveAudio = new Audio("/Save.mp3")
             saveAudio.play()
             setTodos(prevTodos =>
                 prevTodos.map(todo =>
-                    todo._id === uid ? { ...todo, todo: editText,label:selectedLabel, reminder:reminder, priority:priority} : todo
+                    todo._id === uid ? { ...todo, todo: editText, label: selectedLabel, reminder: reminder, priority: priority } : todo
                 )
             );
-            setEditTodoId("");
-            setSelectedLabel("");
-            setReminder(null);
-            setisreminderopen(false);
-            setIspriorityOpen(false);
-            setPriority("")
-
 
             try {
                 // Send update to backend
                 await fetch(`http://localhost:3001/todos/${uid}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ todo: editText, label:selectedLabel, reminder:reminder ,priority:priority}),
+                    body: JSON.stringify({ todo: editText, label: selectedLabel, reminder: reminder, priority: priority }),
                 });
+                setEditTodoId("");
+                setSelectedLabel("");
+                setisreminderopen(false);
+                setReminder(null)
+                setIspriorityOpen(false);
+                setPriority("");
             } catch (error) {
                 console.error("Error updating todo:", error);
             }
@@ -209,7 +206,7 @@ export const TodoProvider = ({ children }) => {
     const handleLabelAdd = async () => {
         if (labels.some((l) => l.label === label)) {  // Check label inside the object
             setLabel("");
-            const errorSound= new Audio("/Error.mp3")
+            const errorSound = new Audio("/Error.mp3")
             errorSound.play();
             console.log("Label already exists.");
             return;
@@ -224,7 +221,7 @@ export const TodoProvider = ({ children }) => {
             if (!response.ok) throw new Error("Failed to create label");
 
             const newLabel = await response.json();
-            const addSound= new Audio("/Todoadded.mp3")
+            const addSound = new Audio("/Todoadded.mp3")
             addSound.play();
             setLabels([...labels, newLabel]); // Ensure only label string is stored
             setLabel(""); // Clear input
@@ -236,25 +233,25 @@ export const TodoProvider = ({ children }) => {
     const handleLabelDelete = async (id, deletelabel) => {
         const confirmDelete = window.confirm(`Are you sure you want to delete this label?`);
         if (!confirmDelete) return;
-    
+
         if (todos.some((todo) => todo.label === deletelabel)) {
             const confirmUnlabel = window.confirm(
                 `Deleting "${deletelabel}" will remove this label from all related tasks. Proceed?`
             );
             if (!confirmUnlabel) return;
         }
-    
+
         console.log("Deleting label with ID:", id);
-        const deleteSound= new Audio("/Delete.mp3")
+        const deleteSound = new Audio("/Delete.mp3")
         deleteSound.play();
-    
+
         if (todos.some((todo) => todo.label === deletelabel)) {
-            let updatedTodo = todos.map(todo => 
+            let updatedTodo = todos.map(todo =>
                 todo.label === deletelabel ? { ...todo, label: "" } : todo
             );
-    
+
             console.log("Updated todos payload:", updatedTodo);
-    
+
             try {
                 // ✅ Update todos before deleting the label
                 let updateResponse = await fetch(`http://localhost:3001/todos`, {
@@ -262,7 +259,7 @@ export const TodoProvider = ({ children }) => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ todos: updatedTodo }),
                 });
-    
+
                 if (!updateResponse.ok) {
                     throw new Error("Failed to update todos");
                 }
@@ -272,15 +269,15 @@ export const TodoProvider = ({ children }) => {
                 return; // Stop execution if update fails
             }
         }
-    
+
         try {
             // ✅ Delete the label only after todos are updated
             let labelResponse = await fetch(`http://localhost:3001/labels/${id}`, { method: "DELETE" });
-    
+
             if (!labelResponse.ok) {
                 throw new Error("Failed to delete label");
             }
-    
+
             setLabels(labels.filter((t) => t._id !== id));
             setFilter("all");
         } catch (error) {
@@ -288,16 +285,17 @@ export const TodoProvider = ({ children }) => {
             alert("Failed to delete label.");
         }
     };
-    
+
 
     return (
         <TodoContext.Provider value={{
-        setFilter,filteredTodos,handleCheckbox, editTodoId, editText, 
-        handleEditClick,handleCancelClick, setEditText, handleDelete, handleSave, filter,
-        handleLabelChange,label,handleLabelAdd,labels,settempLabel,handleLabelDelete,
-        selectedLabel,setSelectedLabel,handleTodoChange,todo,handleAdd,tempLabel,reminder, setReminder,
-        isreminderopen, setisreminderopen,selectedDate, setSelectedDate,priority, setPriority,
-        ispriorityOpen, setIspriorityOpen}}>
+            setFilter, filteredTodos, handleCheckbox, editTodoId, editText,
+            handleEditClick, handleCancelClick, setEditText, handleDelete, handleSave, filter,
+            handleLabelChange, label, handleLabelAdd, labels, settempLabel, handleLabelDelete,
+            selectedLabel, setSelectedLabel, handleTodoChange, todo, handleAdd, tempLabel, reminder, setReminder,
+            isreminderopen, setisreminderopen, selectedDate, setSelectedDate, priority, setPriority,
+            ispriorityOpen, setIspriorityOpen
+        }}>
             {children}
         </TodoContext.Provider>
     );
