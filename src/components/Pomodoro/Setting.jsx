@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react'
-import { PomodoroContext } from "../../context/PomodoroContext";
+import { useDispatch, useSelector } from "react-redux";
+import { reset,setPomodoroTime ,setShortBreakTime,setLongBreakTime,setLongactivate,setSessions,toggleAutoStart} from "./../../redux/slice/pomodoroSlice";
 
-const Setting = ({handleReset}) => {
-    const {setPomodoroTime, pomodoroTime,
-        shortBreakTime, setShortBreakTime,
-        longBreakTime, setLongBreakTime,
-        sessions, setSessions,
-        autoStart, setAutoStart,
-        longactivate, setLongactivate} = useContext(PomodoroContext)
-        
+const Setting = () => {
+
+    const dispatch = useDispatch();
+
+    const {
+        sessions, pomodoroTime, shortBreakTime,
+        longBreakTime, autoStart, longactivate,
+    } = useSelector((state) => state.pomodoro);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -24,7 +25,7 @@ const Setting = ({handleReset}) => {
             {isOpen && (
                 <div className='h-screen w-screen bg-black/50 flex justify-center items-center absolute top-0 left-0'>
                     <div className='h-150 w-100 border-2 border-zinc-500 bg-black text-white text-3xl rounded-3xl relative flex flex-col justify-evenly items-center'>
-                        <button onClick={() => { setIsOpen(false); handleReset() }} className='absolute right-6 top-7'>
+                        <button onClick={() => { setIsOpen(false); dispatch(reset())}} className='absolute right-6 top-7'>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" color="#ffffff" fill="none">
                                 <path d="M15 9L9 14.9996M15 15L9 9.00039" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" />
@@ -34,14 +35,14 @@ const Setting = ({handleReset}) => {
                         <div className='flex flex-col justify-center items-center w-80 '>
                             <p className='text-xl p-1'>Focus Session</p>
                             <div className='flex gap-6 justify-center items-center'>
-                                <button disabled={pomodoroTime / 60 == 1} onClick={() => setPomodoroTime((prev) => prev - 60)}>
+                                <button disabled={pomodoroTime / 60 == 1} onClick={() => dispatch(setPomodoroTime(pomodoroTime - 60))}>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </button>
-                                <p>{pomodoroTime / 60}</p>
-                                <button onClick={() => setPomodoroTime((prev) => prev + 60)} className=''>
+                                <p className='w-10 text-center'>{pomodoroTime / 60}</p>
+                                <button onClick={() => dispatch(setPomodoroTime(pomodoroTime + 60))} className=''>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M12 8V16M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -53,14 +54,14 @@ const Setting = ({handleReset}) => {
                         <div className='flex flex-col justify-center items-center w-80 '>
                             <p className='text-xl p-1'>Short Break</p>
                             <div className='flex gap-6 justify-center items-center'>
-                                <button disabled={shortBreakTime / 60 == 1} onClick={() => setShortBreakTime((prev) => prev - 60)}>
+                                <button disabled={shortBreakTime / 60 == 1} onClick={() => dispatch(setShortBreakTime(shortBreakTime - 60))}>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </button>
-                                <p>{shortBreakTime / 60}</p>
-                                <button onClick={() => setShortBreakTime((prev) => prev + 60)} className=''>
+                                <p className='w-10 text-center'>{shortBreakTime / 60}</p>
+                                <button onClick={() => dispatch(setShortBreakTime(shortBreakTime + 60))} className=''>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M12 8V16M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -72,14 +73,14 @@ const Setting = ({handleReset}) => {
                         <div className='flex flex-col justify-center items-center w-80 '>
                             <p className='text-xl p-1'>Long Break</p>
                             <div className='flex gap-6 justify-center items-center'>
-                                <button disabled={longBreakTime / 60 == 1} onClick={() => setLongBreakTime((prev) => prev - 60)}>
+                                <button disabled={longBreakTime / 60 == 1} onClick={() => dispatch(setLongBreakTime(longBreakTime - 60))}>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </button>
-                                <p>{longBreakTime / 60}</p>
-                                <button onClick={() => setLongBreakTime((prev) => prev + 60)} className=''>
+                                <p className='w-10 text-center'>{longBreakTime / 60}</p>
+                                <button onClick={() => dispatch(setLongBreakTime(longBreakTime + 60))} className=''>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M12 8V16M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -91,14 +92,14 @@ const Setting = ({handleReset}) => {
                         <div className='flex flex-col justify-center items-center w-80 '>
                             <p className='text-xl p-1'>Long Break Interval</p>
                             <div className='flex gap-6 justify-center items-center'>
-                                <button disabled={longactivate == 0} onClick={() => setLongactivate((prev) => prev - 1)}>
+                                <button disabled={longactivate == 0} onClick={() => dispatch(setLongactivate(longactivate - 1))}>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </button>
-                                <p>{longactivate}</p>
-                                <button onClick={() => setLongactivate((prev) => prev + 1)} className=''>
+                                <p className='w-10 text-center'>{longactivate}</p>
+                                <button onClick={() => dispatch(setLongactivate(longactivate + 1))} className=''>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M12 8V16M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -110,14 +111,14 @@ const Setting = ({handleReset}) => {
                         <div className='flex flex-col justify-center items-center w-80 '>
                             <p className='text-xl p-1'>Sessions</p>
                             <div className='flex gap-6 justify-center items-center'>
-                                <button disabled={sessions == 1} onClick={() => setSessions((prev) => prev - 1)}>
+                                <button disabled={sessions == 1} onClick={() => dispatch(setSessions(sessions - 1))}>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </button>
-                                <p>{sessions}</p>
-                                <button disabled={sessions == 12} onClick={() => setSessions((prev) => prev + 1)} className=''>
+                                <p className='w-10 text-center'>{sessions}</p>
+                                <button disabled={sessions == 12} onClick={() => dispatch(setSessions(sessions + 1))} className=''>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30" color="#ffffff" fill="none">
                                         <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
                                         <path d="M12 8V16M16 12H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -128,7 +129,7 @@ const Setting = ({handleReset}) => {
 
                         <div className='flex gap-3  justify-center items-center w-80 '>
                             <p className='text-xl'>Auto Start Timer</p>
-                            <div onClick={() => setAutoStart(!autoStart)}
+                            <div onClick={() => dispatch(toggleAutoStart())}
                                 className={`w-[72px] h-10 rounded-full cursor-pointer flex items-center px-1 transition-all duration-300 
                                     ${autoStart ? "bg-lime-600" : "bg-gray-400"}`}>
                                 <div className={`h-8 w-8 rounded-full bg-white  transition-all duration-300
@@ -137,7 +138,7 @@ const Setting = ({handleReset}) => {
                             </div>
                         </div>
 
-                        <button onClick={() => { setIsOpen(false); handleReset() }} className='py-2 px-10 text-xl rounded-full bg-amber-500'>OK</button>
+                        <button onClick={() => { setIsOpen(false); dispatch(reset())}} className='py-2 px-10 text-xl rounded-full bg-amber-500'>OK</button>
 
                     </div>
 

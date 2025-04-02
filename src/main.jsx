@@ -4,16 +4,18 @@ import './index.css'
 import App from './App.jsx'
 import { TodoProvider } from './context/TodoContext.jsx'
 import { UiProvider } from './context/UiContext.jsx'
-import { PomodoroProvider } from './context/PomodoroContext.jsx'
+import store from './redux/store.js'
+import { Provider } from 'react-redux'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <UiProvider>
-            <TodoProvider>
-                <PomodoroProvider>
-                <App />
-                </PomodoroProvider>
-            </TodoProvider>
-        </UiProvider>
+        <Provider store={store}>
+            <UiProvider>
+                <TodoProvider>
+                    
+                        <App />
+                </TodoProvider>
+            </UiProvider>
+        </Provider>
     </StrictMode>,
 )

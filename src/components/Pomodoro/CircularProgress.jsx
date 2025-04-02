@@ -1,9 +1,14 @@
-import React, { useContext} from "react";
+import React from "react";
 import CircularInner from "./CircularInner";
-import { PomodoroContext } from "../../context/PomodoroContext";
+import {useSelector } from "react-redux";
 
 const CircularProgress = React.memo(({size = 370, strokeWidth = 10 }) => {
-    const {mode,timeLeft,pomodoroTime,shortBreakTime,longBreakTime}=useContext(PomodoroContext)
+    const {
+        pomodoroTime, shortBreakTime,
+        longBreakTime,
+        mode, timeLeft,
+    } = useSelector((state) => state.pomodoro);
+
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const totalTime= (mode === "pomodoro" ? pomodoroTime : mode === "short" ? shortBreakTime : longBreakTime)

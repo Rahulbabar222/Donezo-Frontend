@@ -1,9 +1,18 @@
-import React,{useContext} from 'react'
-import { PomodoroContext } from '../../context/PomodoroContext'
-
+import React from 'react'
+import { useSelector } from "react-redux";
 
 const CircularInner = () => {
-    const {mode, formatTime, sessions, sessionLeft,timeLeft}=useContext(PomodoroContext)
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes < 10 ? "0" : ""}${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    };
+
+    const {
+        sessions,
+        mode, sessionLeft, timeLeft
+    } = useSelector((state) => state.pomodoro);
+
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
                     {mode === "pomodoro" ?
