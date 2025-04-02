@@ -6,11 +6,20 @@ import { TodoContext } from "../context/TodoContext";
 import { UiContext } from '../context/UiContext';
 import Reminder from './Reminder';
 import Priority from './Priority';
+import { useDispatch, useSelector } from "react-redux";
+import {setTodo,addTodo} from "./../redux/slice/todoSlice"
 
 
 function Home() {
-    const { handleTodoChange, todo, handleAdd, editTodoId } = useContext(TodoContext)
+    const dispatch= useDispatch()
+    const {todo} = useSelector((state)=>state.todo)
+
+    const {handleAdd, editTodoId } = useContext(TodoContext)
     const { isSidebarOpen } = useContext(UiContext)
+
+    const handleTodoChange = (e) => {
+        dispatch(setTodo(e.target.value))
+    };
 
     return (
         <>
@@ -26,8 +35,8 @@ function Home() {
                     {/* Add todo section */}
                     <div>
                         <div className="addToDo bg-[#f1ece6] rounded-full sm:w-full flex justify-between">
-                            <input onChange={handleTodoChange} value={todo} required className='w-full focus:outline-none px-5 placeholder:text-sm text-zinc-500' type="text" name="todo" placeholder='What do you need to do?' />
-                            <button onClick={handleAdd} disabled={!todo.trim()} className=' disabled:bg-gray-500 text-white rounded-r-full py-3 px-5 bg-[#76b7cd] hover:bg-[#8bc5da]'>ADD</button>
+                            <input onChange={handleTodoChange} required className='w-full focus:outline-none px-5 placeholder:text-sm text-zinc-500' type="text" name="todo" placeholder='What do you need to do?' />
+                            <button onClick={()=>dispatch(addTodo())} className=' disabled:bg-gray-500 text-white rounded-r-full py-3 px-5 bg-[#76b7cd] hover:bg-[#8bc5da]'>ADD</button>
 
                         </div>
 

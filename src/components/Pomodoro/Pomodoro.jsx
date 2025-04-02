@@ -64,6 +64,15 @@ const Pomodoro = () => {
 
     return (
         <div className="h-screen w-screen bg-[#1e2140] flex flex-col items-center justify-center relative gap-10">
+            <div className="absolute left-0 top-0 sm:left-10 sm:top-10 text-[#dce0fe]">
+                <a href="/" className="flex p-2 rounded-full hover:border-1 border-[#dce0fe] hover:bg-[#272b51]">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#dce0fe" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+                        <path d="M13.5 16C13.5 16 10.5 13.054 10.5 12C10.5 10.9459 13.5 8 13.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <p className="pl-3 hidden sm:block">Back to Home</p></a>
+            </div>
+
             <div className="text-5xl text-[#dce0fe]"><h1>PoMoDoRo</h1></div>
 
             <div className="circle flex p-2 justify-center items-center rounded-full font-bold bg-[#181818]">
